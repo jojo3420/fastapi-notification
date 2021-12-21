@@ -1,7 +1,10 @@
 from typing import Optional
+from dataclasses import asdict
+
 from fastapi import FastAPI
 import uvicorn
 from app.common.config import conf
+from devtools import debug
 
 
 def create_app():
@@ -9,8 +12,6 @@ def create_app():
 
     app = FastAPI()
     config = conf()
-    # print(config)
-
     # 데이터베이스 초기화
 
     # 레디스 초기화
@@ -26,9 +27,9 @@ app = create_app()
 
 
 @app.get('/')
-def home():
-    return {'msg': 'Hello World'}
+def health_check():
+    return {'health_check': 'ok'}
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', port=8000, reload=conf().PROJ_RELOAD)
+    uvicorn.run('app.main:app', port=8000, reload=conf().PROJ_RELOAD)
